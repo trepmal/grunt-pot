@@ -157,46 +157,65 @@ module.exports = function(grunt) {
 					// if found, look for other headers, build string
 					if ( plugin_name ) {
 
-						append += "\n#. Plugin Name of the plugin/theme\n";
-						append += "msgid \"" + plugin_name[1].trim() +"\"\n";
-						append += "msgstr \"\"\n\n";
+						var potFileContents = grunt.file.read( potFile );
 
-						grunt.verbose.writeln( plugin_name[1].trim() );
-						grunt.verbose.writeln( '-----' );
+
+						var msgid = "msgid \"" + plugin_name[1].trim() +"\"";
+						// check if msgid already exists
+						var re = new RegExp( msgid );
+						if ( ! re.test( potFileContents ) ) {
+							append += "\n#. Plugin Name of the plugin/theme\n";
+							append += msgid+"\n";
+							append += "msgstr \"\"\n\n";
+						}
+
 
 						var plugin_uri = /^\W*?Plugin URI:(.*?)$/gim.exec(contents);
+						if ( plugin_uri ) {
 
-						if ( plugin_uri[1].trim() ) {
-							append += "#. Plugin URI of the plugin/theme\n";
-							append += "msgid \"" + plugin_uri[1].trim() +"\"\n";
-							append += "msgstr \"\"\n\n";
+							var msgid = "msgid \"" + plugin_uri[1].trim() +"\"\n";
+							var re = new RegExp( msgid );
+							if ( ! re.test( potFileContents ) ) {
+								append += "#. Plugin URI of the plugin/theme\n";
+								append += msgid+"\n";
+								append += "msgstr \"\"\n\n";
+							}
 						}
 
 						var description = /^\W*?Description:(.*?)$/gim.exec(contents);
+						if ( description ) {
 
-						if ( description[1].trim() ) {
-							append += "#. Description of the plugin/theme\n";
-							append += "msgid \"" + description[1].trim() +"\"\n";
-							append += "msgstr \"\"\n\n";
+							var msgid = "msgid \"" + description[1].trim() +"\"\n";
+							var re = new RegExp( msgid );
+							if ( ! re.test( potFileContents ) ) {
+								append += "#. Description of the plugin/theme\n";
+								append += msgid+"\n";
+								append += "msgstr \"\"\n\n";
+							}
 						}
 
 						var author = /^\W*?Author:(.*?)$/gim.exec(contents);
-
-						if ( author[1].trim() ) {
-							append += "#. Author of the plugin/theme\n";
-							append += "msgid \"" + author[1].trim() +"\"\n";
-							append += "msgstr \"\"\n\n";
+						if ( author ) {
+							var msgid = "msgid \"" + author[1].trim() +"\"\n";
+							var re = new RegExp( msgid );
+							if ( ! re.test( potFileContents ) ) {
+								append += "#. Author of the plugin/theme\n";
+								append += msgid+"\n";
+								append += "msgstr \"\"\n\n";
+							}
 						}
 
 						var author_uri = /^\W*?Author URI:(.*?)$/gim.exec(contents);
 
-						if ( author_uri[1].trim() ) {
-							append += "#. Author URI of the plugin/theme\n";
-							append += "msgid \"" + author_uri[1].trim() +"\"\n";
-							append += "msgstr \"\"\n\n";
+						if ( author_uri ) {
+							var msgid = "msgid \"" + author_uri[1].trim() +"\"\n";
+							var re = new RegExp( msgid );
+							if ( ! re.test( potFileContents ) ) {
+								append += "#. Author URI of the plugin/theme\n";
+								append += msgid+"\n";
+								append += "msgstr \"\"\n\n";
+							}
 						}
-
-						var potFileContents = grunt.file.read( potFile );
 
 						potFileContents += append;
 
