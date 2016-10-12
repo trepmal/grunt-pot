@@ -33,7 +33,10 @@ module.exports = function(grunt) {
 		copyright_holder: false,
 		comment_tag: '/',
 		msgmerge: false,
+		wordpress: false,
 	});
+
+	var files = this.files;
 
 	grunt.verbose.writeflags(options, 'Pot options');
 
@@ -91,7 +94,7 @@ module.exports = function(grunt) {
 	}
 
 	//Generate list of files to scan
-	this.files.forEach(function(file) {
+	files.forEach(function(file) {
 		if( !grunt.file.isDir( file.src[0] ) ){
 			inputFiles +=  " " + file.src[0];
 		}
@@ -128,9 +131,86 @@ module.exports = function(grunt) {
 
 			}
 
+			if ( options.wordpress ) {
+				wordpressHeaders();
+			}
+
 			done( error ); //error will be null if command executed without errors.
 		}
   	);
+
+	// look for wordpress plugin headers to translate
+	function wordpressHeaders() {
+
+		// loop through files
+		files.some(function(file) {
+			// skip directories
+			if( !grunt.file.isDir( file.src[0] ) ) {
+
+				// get contents
+				var contents = grunt.file.read( file.src );
+
+				// look for plugin header
+				var plugin_name = /^\W*?Plugin Name:(.*?)$/gim.exec(contents);
+				var append = '';
+
+				// if found, look for other headers, build string
+				if ( plugin_name ) {
+
+					append += "\n#. Plugin Name of the plugin/theme\n";
+					append += "msgid \"" + plugin_name[1].trim() +"\"\n";
+					append += "msgstr \"\"\n\n";
+
+					grunt.verbose.writeln( plugin_name[1].trim() );
+					grunt.verbose.writeln( '-----' );
+
+					var plugin_uri = /^\W*?Plugin URI:(.*?)$/gim.exec(contents);
+
+					if ( plugin_uri[1].trim() ) {
+						append += "#. Plugin URI of the plugin/theme\n";
+						append += "msgid \"" + plugin_uri[1].trim() +"\"\n";
+						append += "msgstr \"\"\n\n";
+					}
+
+					var description = /^\W*?Description:(.*?)$/gim.exec(contents);
+
+					if ( description[1].trim() ) {
+						append += "#. Description of the plugin/theme\n";
+						append += "msgid \"" + description[1].trim() +"\"\n";
+						append += "msgstr \"\"\n\n";
+					}
+
+					var author = /^\W*?Author:(.*?)$/gim.exec(contents);
+
+					if ( author[1].trim() ) {
+						append += "#. Author of the plugin/theme\n";
+						append += "msgid \"" + author[1].trim() +"\"\n";
+						append += "msgstr \"\"\n\n";
+					}
+
+					var author_uri = /^\W*?Author URI:(.*?)$/gim.exec(contents);
+
+					if ( author_uri[1].trim() ) {
+						append += "#. Author URI of the plugin/theme\n";
+						append += "msgid \"" + author_uri[1].trim() +"\"\n";
+						append += "msgstr \"\"\n\n";
+					}
+
+					var potFileContents = grunt.file.read( potFile );
+
+					potFileContents += append;
+
+					grunt.file.write( potFile, potFileContents );
+
+					return true;
+
+				}
+
+				grunt.verbose.writeln( file.dest  + "keep going....." );
+
+			}
+		});
+	}
 
   });
 
