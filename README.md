@@ -142,6 +142,11 @@ Default value: `null`
 
 Whether (and how) to include the translatable string's location(s). Accepts 'full' (file and line number), 'file' (file name only) or 'never' (no references). When not specified reverts to the default behaviour of 'full'.
 
+#### wordpress
+Type: `bool`
+Default value: `false`
+
+Parses files for WordPress plugin headers to translate.
 
 ### Usage Examples
 
