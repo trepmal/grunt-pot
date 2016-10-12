@@ -159,12 +159,11 @@ module.exports = function(grunt) {
 
 						var potFileContents = grunt.file.read( potFile );
 
-
 						var msgid = "msgid \"" + plugin_name[1].trim() +"\"";
 						// check if msgid already exists
 						var re = new RegExp( msgid );
 						if ( ! re.test( potFileContents ) ) {
-							append += "\n#. Plugin Name of the plugin/theme\n";
+							append += "#. Plugin Name of the plugin/theme\n";
 							append += msgid+"\n";
 							append += "msgstr \"\"\n\n";
 						}
@@ -173,7 +172,7 @@ module.exports = function(grunt) {
 						var plugin_uri = /^\W*?Plugin URI:(.*?)$/gim.exec(contents);
 						if ( plugin_uri ) {
 
-							var msgid = "msgid \"" + plugin_uri[1].trim() +"\"\n";
+							var msgid = "msgid \"" + plugin_uri[1].trim() +"\"";
 							var re = new RegExp( msgid );
 							if ( ! re.test( potFileContents ) ) {
 								append += "#. Plugin URI of the plugin/theme\n";
@@ -185,7 +184,7 @@ module.exports = function(grunt) {
 						var description = /^\W*?Description:(.*?)$/gim.exec(contents);
 						if ( description ) {
 
-							var msgid = "msgid \"" + description[1].trim() +"\"\n";
+							var msgid = "msgid \"" + description[1].trim() +"\"";
 							var re = new RegExp( msgid );
 							if ( ! re.test( potFileContents ) ) {
 								append += "#. Description of the plugin/theme\n";
@@ -196,7 +195,7 @@ module.exports = function(grunt) {
 
 						var author = /^\W*?Author:(.*?)$/gim.exec(contents);
 						if ( author ) {
-							var msgid = "msgid \"" + author[1].trim() +"\"\n";
+							var msgid = "msgid \"" + author[1].trim() +"\"";
 							var re = new RegExp( msgid );
 							if ( ! re.test( potFileContents ) ) {
 								append += "#. Author of the plugin/theme\n";
@@ -208,7 +207,7 @@ module.exports = function(grunt) {
 						var author_uri = /^\W*?Author URI:(.*?)$/gim.exec(contents);
 
 						if ( author_uri ) {
-							var msgid = "msgid \"" + author_uri[1].trim() +"\"\n";
+							var msgid = "msgid \"" + author_uri[1].trim() +"\"";
 							var re = new RegExp( msgid );
 							if ( ! re.test( potFileContents ) ) {
 								append += "#. Author URI of the plugin/theme\n";
@@ -217,7 +216,7 @@ module.exports = function(grunt) {
 							}
 						}
 
-						potFileContents += append;
+						potFileContents += "\n" + append;
 
 						grunt.file.write( potFile, potFileContents );
 
