@@ -139,7 +139,7 @@ module.exports = function(grunt) {
 			}
 		);
 
-	// look for wordpress plugin headers to translate
+		// look for wordpress plugin headers to translate
 		function wordpressHeaders() {
 
 			// loop through files
